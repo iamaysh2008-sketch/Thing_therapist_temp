@@ -6,7 +6,13 @@ import base64
 app = Flask(__name__)
 
 def get_openai_client():
-    return OpenAI()
+    api_key = os.getenv("OPENAI_API_KEY", "").strip()
+    if not api_key:
+        raise RuntimeError(
+            "OPENAI_API_KEY is not configured. Add it to the Vercel project "
+            "environment variables and redeploy."
+        )
+    return OpenAI(api_key=api_key)
 
 # Upload folder
 UPLOAD_FOLDER = "uploads"
@@ -64,7 +70,7 @@ def analyser():
             # Ask the AI
             response = get_openai_client().responses.create(
 
-                model="gpt-4o",
+                model="gpt-4o-mini",
 
                 input=[
                     {
@@ -131,6 +137,10 @@ Keep the response short, funny and playful.
                 "🔑 The Object Oracle's API key is invalid or has been "
                 "revoked. Update OPENAI_API_KEY in Vercel, then redeploy."
             )
+
+        except RuntimeError as error:
+
+            result = f"⚙️ Configuration problem: {error}"
 
         except Exception:
 
