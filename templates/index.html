@@ -13,7 +13,7 @@
 
     <h2>Upload an object that needs advice 📸</h2>
 
-    <form method="POST" enctype="multipart/form-data">
+    <form method="POST" enctype="multipart/form-data" onsubmit="showloading()">
 
         <input
             type="file"
@@ -27,6 +27,9 @@
 
         <button type="submit">
             Give Advice
+            <p id="loading" style="display:none;">
+    🔮 Consulting the Object Oracle... Please wait 😭
+            </p>
         </button>
         <a href="/">← Back to Home</a>
 
@@ -38,6 +41,7 @@
 
     {% endif %}
 <script>
+
 function previewImage(event) {
     const image = document.getElementById("preview");
 
@@ -45,6 +49,11 @@ function previewImage(event) {
 
     image.style.display = "block";
 }
+
+function showLoading() {
+    document.getElementById("loading").style.display = "block";
+}
+
 </script>
 
 </body>
