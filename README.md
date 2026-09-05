@@ -2,20 +2,20 @@
 
 
 
-# [Project Name] 🎯
+# THING THERAPIST 🎯
 
 
 ## Basic Details
-### Team Name: [Name]
+### Team Name: HAYSH
 
 
 ### Team Members
-- Team Lead: [Name] - [College]
-- Member 2: [Name] - [College]
-- Member 3: [Name] - [College]
+- Member 1: HANEEN AJAS - SSET
+- Member 2: AYSHA K A - SSET
+
 
 ### Project Description
-[2-3 lines about what your project does]
+A completely unnecessary and slightly ridiculous web app that gives life advice to everyday objects. Upload a picture of an object, and the THING THERAPIST will analyze it and provide funny, personalized advice based on its purpose. Because apparently, even objects have feelings and need advice. 😭
 
 ### The Problem (that doesn't exist)
 [What ridiculous problem are you solving?]

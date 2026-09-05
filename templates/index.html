@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Object Adviser 🔮</title>
+</head>
+
+<body>
+
+    <h1>🔮 OBJECT ADVISER</h1>
+
+    <p>Because even objects need life advice.</p>
+
+    <h2>What object needs advice today?</h2>
+
+    <form method="POST">
+
+        <input 
+            type="text" 
+            name="object" 
+            placeholder="Example: Chair"
+            required
+        >
+
+        <button type="submit">
+            Get Advice
+        </button>
+
+    </form>
+
+    {% if advice %}
+
+        <h2>💬 Advice for your object:</h2>
+
+        <p>{{ advice }}</p>
+
+    {% endif %}
+
+</body>
+</html>
