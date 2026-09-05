@@ -4,7 +4,6 @@ import unittest
 from unittest.mock import patch
 
 import app
-from openai import AuthenticationError
 
 
 class FakeMessage:
@@ -19,57 +18,44 @@ class FakeResponse:
     choices = [FakeChoice()]
 
 
-class FakeCompletions:
+class FakeModels:
     def __init__(self):
         self.request = None
 
-    def create(self, **kwargs):
+    def generate_content(self, **kwargs):
         self.request = kwargs
         return FakeResponse()
 
 
 class FakeClient:
     def __init__(self):
-        self.completions = FakeCompletions()
-        self.chat = type("Chat", (), {"completions": self.completions})()
+        self.models = FakeModels()
 
 
 class AppTests(unittest.TestCase):
-    def test_analyser_sends_openrouter_vision_request(self):
+    def test_analyser_sends_gemini_vision_request(self):
         fake_client = FakeClient()
 
-        with patch.object(app, "get_openai_client", return_value=fake_client):
+        with patch.object(app, "get_gemini_client", return_value=fake_client):
             response = app.app.test_client().post(
                 "/analyser",
                 data={"image": (io.BytesIO(b"image-bytes"), "chair.jpg")},
                 content_type="multipart/form-data",
             )
 
-        request = fake_client.completions.request
+        request = fake_client.models.request
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(request["model"], "openai/gpt-4o-mini")
-        self.assertEqual(request["messages"][0]["content"][0]["type"], "text")
-        image_part = request["messages"][0]["content"][1]
-        self.assertEqual(image_part["type"], "image_url")
-        self.assertTrue(image_part["image_url"]["url"].startswith("data:image/jpeg;base64,"))
+        self.assertEqual(request["model"], "gemini-2.5-flash")
+        self.assertIn("OBJECT:", request["contents"][0])
+        image_part = request["contents"][1]
+        self.assertEqual(image_part.mime_type, "image/jpeg")
+        self.assertEqual(image_part.data, b"image-bytes")
         self.assertIn("OBJECT: Chair", response.get_data(as_text=True))
 
     def test_authentication_error_is_shown_to_user(self):
-        error = AuthenticationError(
-            message="invalid key",
-            response=type(
-                "Response",
-                (),
-                {
-                    "request": None,
-                    "status_code": 401,
-                    "headers": {},
-                },
-            )(),
-            body={"error": {"message": "invalid key"}},
-        )
+        error = RuntimeError("invalid API key")
 
-        with patch.object(app, "get_openai_client", side_effect=error):
+        with patch.object(app, "get_gemini_client", side_effect=error):
             response = app.app.test_client().post(
                 "/analyser",
                 data={"image": (io.BytesIO(b"image-bytes"), "chair.jpg")},
@@ -77,7 +63,7 @@ class AppTests(unittest.TestCase):
             )
 
         self.assertEqual(response.status_code, 200)
-        self.assertIn("OPENROUTER_API_KEY", response.get_data(as_text=True))
+        self.assertIn("GEMINI_API_KEY", response.get_data(as_text=True))
 
 
 if __name__ == "__main__":

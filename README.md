@@ -52,10 +52,23 @@ flask --app app run
 
 1. Push this repository to GitHub.
 2. In [Vercel](https://vercel.com), select **Add New Project**, import this GitHub repository, and keep the project root as the repository root.
-3. Add an environment variable named `OPENROUTER_API_KEY` in the Vercel project settings. Use the same key locally in a `.env` file if needed; never commit the key.
+3. Add an environment variable named `GEMINI_API_KEY` in the Vercel project settings. Use the same key locally in a `.env` file if needed; never commit the key.
 4. Deploy. Vercel uses `vercel.json` and `requirements.txt` to run the Flask app.
 
-The upload is processed in memory because Vercel function storage is temporary. An OpenRouter API key is required for image analysis.
+The upload is processed in memory because Vercel function storage is temporary. A Gemini API key is required for image analysis.
+
+### Gemini API key setup
+
+1. Create a key in [Google AI Studio](https://aistudio.google.com/apikey).
+2. For local development, put it in the project root `.env` file:
+
+	```env
+	GEMINI_API_KEY=your_gemini_api_key_here
+	```
+
+3. For Vercel, open **Project Settings > Environment Variables**, add `GEMINI_API_KEY`, paste the key as the value, and redeploy.
+
+Never put the key in `app.py`, HTML, JavaScript, or a committed file. If an old key has been exposed, revoke it in Google AI Studio and create a replacement.
 
 ### Project Documentation
 For Software:

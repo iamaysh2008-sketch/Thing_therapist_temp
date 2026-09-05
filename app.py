@@ -1,30 +1,24 @@
 from flask import Flask, render_template, request
-from openai import AuthenticationError, OpenAI
+from google import genai
 from dotenv import load_dotenv
 import os
-import base64
 
 load_dotenv()
 
 app = Flask(__name__)
-
-def get_openai_client():
-    api_key = os.getenv("OPENROUTER_API_KEY", os.getenv("OPENAI_API_KEY", "")).strip()
-    if not api_key:
-        raise RuntimeError(
-            "OPENROUTER_API_KEY is not configured. Add it to the Vercel project "
-            "environment variables and redeploy."
-        )
-    return OpenAI(
-        api_key=api_key,
-        base_url="https://openrouter.ai/api/v1/"
-    )
 
 # Upload folder
 UPLOAD_FOLDER = "uploads"
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+# Initialize the Gemini Client once at startup to avoid garbage collection errors
+api_key = os.getenv("GEMINI_API_KEY", "").strip()
+if api_key:
+    client = genai.Client(api_key=api_key)
+else:
+    client = None
 
 
 # -----------------------------
@@ -66,28 +60,18 @@ def analyser():
         # Read the image directly
         image_data = image.read()
 
-        # Convert image to Base64
-        encoded_image = base64.b64encode(
-            image_data
-        ).decode("utf-8")
-
         try:
+            # Verify API Key is configured
+            if not client:
+                raise RuntimeError(
+                    "GEMINI_API_KEY is not configured. Add it to your .env or environment variables."
+                )
 
-            # Ask the AI
-            response = get_openai_client().chat.completions.create(
-
-                model="openai/gpt-4o-mini",
-
-                messages=[
-                    {
-                        "role": "user",
-
-                        "content": [
-
-                            {
-                                "type": "text",
-
-                                "text": """
+            # Ask the AI using the persistent global client
+            response = client.models.generate_content(
+                model="gemini-3.5-flash",
+                contents=[
+                    """
 You are the world's most unnecessary
 therapist for everyday objects.
 
@@ -118,44 +102,30 @@ everyone else. Maybe it is finally time to
 take a stand for yourself.
 
 Keep the response short, funny and playful.
-"""
-                            },
-
-                            {
-                                "type": "image_url",
-                                "image_url": {
-                                    "url":
-                                    f"data:{image.mimetype or 'image/jpeg'};base64,{encoded_image}"
-                                }
-                            }
-                        ]
-                    }
-                ]
+""",
+                    genai.types.Part.from_bytes(
+                        data=image_data,
+                        mime_type=image.mimetype or "image/jpeg",
+                    ),
+                ],
             )
 
-            result = response.choices[0].message.content
+            result = response.text
 
-
-        # Show a friendly error instead of
-        # crashing the entire website
-        except AuthenticationError:
-
-            result = (
-                "🔑 The Object Oracle's API key is invalid or has been "
-                "revoked. Update OPENROUTER_API_KEY in Vercel, then redeploy."
-            )
-
-        except RuntimeError as error:
-
-            result = f"⚙️ Configuration problem: {error}"
-
+        # Show a friendly error instead of crashing the entire website
         except Exception as error:
-
-            result = (
-                "🚨 The Object Oracle had a problem 😭\n\n"
-                f"Please try again in a moment. Error: {error}"
-            )
-
+            if "api key" in str(error).lower() or "authentication" in str(error).lower():
+                result = (
+                    "🔑 The Object Oracle's Gemini API key is invalid or has been "
+                    "revoked. Update GEMINI_API_KEY in Vercel, then redeploy."
+                )
+            elif isinstance(error, RuntimeError):
+                result = f"⚙️ Configuration problem: {error}"
+            else:
+                result = (
+                    "🚨 The Object Oracle had a problem 😭\n\n"
+                    f"Please try again in a moment. Error: {error}"
+                )
 
     return render_template(
         "index.html",
