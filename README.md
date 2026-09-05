@@ -72,14 +72,19 @@ Never put the key in `app.py`, HTML, JavaScript, or a committed file. If an old 
 For Software:
 
 # Screenshots 
-![Screenshot1](Add screenshot 1 here with proper name)
-*Add caption explaining what this shows*
+<img width="326" height="131" alt="Screenshot 2026-09-06 042528" src="https://github.com/user-attachments/assets/58d8edef-cd90-43d8-b670-523fbd666d74" />
+*Welcome! 🎉 – The user enters a colourful, chaotic world filled with floating objects.*
 
-![Screenshot2](Add screenshot 2 here with proper name)
-*Add caption explaining what this shows*
+<img width="943" height="416" alt="Screenshot 2026-09-06 042351" src="https://github.com/user-attachments/assets/833ff083-848f-4e7c-94f0-f52e826a12ed" />
+Upload an Object 📸 – Choose a photo of any everyday object, like a chair, spoon, or shoe.  AI Investigation 🕵️ – The app sends the image to AI, which identifies the object.
 
-![Screenshot3](Add screenshot 3 here with proper name)
-*Add caption explaining what this shows*
+<img width="920" height="404" alt="image" src="https://github.com/user-attachments/assets/ee74f5b5-3e86-44ae-bc1d-af0ad7b4f240" />
+Emergency Object Therapy 🛋️ – The AI imagines the object's secret emotional struggles. 😭
+
+<img width="935" height="416" alt="Screenshot 2026-09-06 042540" src="https://github.com/user-attachments/assets/d33077aa-500d-49f6-bdee-f3e908f8c143" />
+The Final Diagnosis 🤖 – The object receives a funny emotional status, rating, and completely necessary life advice.
+Because apparently even your bed needs therapy. 
+
 
 
 ## Team Contributions
