@@ -6,15 +6,15 @@ import base64
 app = Flask(__name__)
 
 def get_openai_client():
-    api_key = os.getenv("OPENAI_API_KEY", "").strip()
+    api_key = os.getenv("OPENROUTER_API_KEY", os.getenv("OPENAI_API_KEY", "")).strip()
     if not api_key:
         raise RuntimeError(
-            "OPENAI_API_KEY is not configured. Add it to the Vercel project "
+            "OPENROUTER_API_KEY is not configured. Add it to the Vercel project "
             "environment variables and redeploy."
         )
     return OpenAI(
         api_key=api_key,
-        base_url="https://openrouter.ai/api/v1"
+        base_url="https://openrouter.ai/api/v1/"
     )
 
 # Upload folder
@@ -71,18 +71,18 @@ def analyser():
         try:
 
             # Ask the AI
-            response = get_openai_client().responses.create(
+            response = get_openai_client().chat.completions.create(
 
-                model="openai/gpt-4o:batch",
+                model="openai/gpt-4o-mini",
 
-                input=[
+                messages=[
                     {
                         "role": "user",
 
                         "content": [
 
                             {
-                                "type": "input_text",
+                                "type": "text",
 
                                 "text": """
 You are the world's most unnecessary
@@ -119,17 +119,18 @@ Keep the response short, funny and playful.
                             },
 
                             {
-                                "type": "input_image",
-
-                                "image_url":
-                                f"data:{image.mimetype or 'image/jpeg'};base64,{encoded_image}"
+                                "type": "image_url",
+                                "image_url": {
+                                    "url":
+                                    f"data:{image.mimetype or 'image/jpeg'};base64,{encoded_image}"
+                                }
                             }
                         ]
                     }
                 ]
             )
 
-            result = response.output_text
+            result = response.choices[0].message.content
 
 
         # Show a friendly error instead of
@@ -138,7 +139,7 @@ Keep the response short, funny and playful.
 
             result = (
                 "🔑 The Object Oracle's API key is invalid or has been "
-                "revoked. Update OPENAI_API_KEY in Vercel, then redeploy."
+                "revoked. Update OPENROUTER_API_KEY in Vercel, then redeploy."
             )
 
         except RuntimeError as error:
