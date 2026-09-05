@@ -18,10 +18,10 @@
 A completely unnecessary and slightly ridiculous web app that gives life advice to everyday objects. Upload a picture of an object, and the THING THERAPIST will analyze it and provide funny, personalized advice based on its purpose. Because apparently, even objects have feelings and need advice. 😭
 
 ### The Problem (that doesn't exist)
-[What ridiculous problem are you solving?]
+Everyday objects have feelings too. Unfortunately, they have absolutely no one to give them life advice. Until now.
 
 ### The Solution (that nobody asked for)
-[How are you solving it? Keep it fun!]
+We use AI to analyse your everyday objects and give them completely necessary life advice. Upload a picture of anything—a chair, a bedsheet, a spoon—and let our highly qualified AI therapist solve problems. 😭🔮
 
 ## Technical Details
 ### Technologies/Components Used
