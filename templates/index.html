@@ -2,59 +2,151 @@
 <html>
 
 <head>
-    <title>THING THERAPIST 🔮</title>
+    <title>Object Adviser 🔮</title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            min-height: 100vh;
+            padding: 40px;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+        }
+
+        #preview {
+            display: none;
+            max-width: 300px;
+            max-height: 300px;
+            margin: 20px auto;
+            border-radius: 15px;
+        }
+
+        button {
+            padding: 15px 25px;
+            font-size: 16px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #eeeeee;
+            border-radius: 15px;
+        }
+
+        #loading {
+            display: none;
+            margin-top: 20px;
+        }
+
+    </style>
+
 </head>
+
 
 <body>
 
-    <h1>🔮THING THERAPIST</h1>
+    <div class="container">
 
-    <p>Because even objects need life advice.</p>
-
-    <h2>Upload an object that needs advice 📸</h2>
-
-    <form method="POST" enctype="multipart/form-data" onsubmit="showloading()">
-
-        <input
-            type="file"
-            name="image"
-            accept="image/*"
-            required
-        >
-
-        <br><br>
-        <img id="preview" style="display:none; max-width:300px; border-radius:15px;">
-
-        <button type="submit">
-            Give Advice
-            <p id="loading" style="display:none;">
-    🔮 Consulting the Object Oracle... Please wait 😭
-            </p>
-        </button>
         <a href="/">← Back to Home</a>
 
-    </form>
+        <h1>🔮 Object Adviser</h1>
 
-    {% if result %}
+        <p>
+            Upload an object and give it the emotional support
+            it definitely did not ask for. 😭
+        </p>
 
-        <h2>{{ result }}</h2>
 
-    {% endif %}
-<script>
+        <form
+            method="POST"
+            enctype="multipart/form-data"
+            onsubmit="showLoading()"
+        >
 
-function previewImage(event) {
-    const image = document.getElementById("preview");
+            <h2>Choose your object 📸</h2>
 
-    image.src = URL.createObjectURL(event.target.files[0]);
+            <input
+                type="file"
+                name="image"
+                accept="image/*"
+                required
+                onchange="previewImage(event)"
+            >
 
-    image.style.display = "block";
-}
+            <br>
 
-function showLoading() {
-    document.getElementById("loading").style.display = "block";
-}
+            <img id="preview">
 
-</script>
+            <br>
+
+            <button type="submit">
+                🔮 Give My Object Advice
+            </button>
+
+        </form>
+
+
+        <p id="loading">
+            🔮 Consulting the Object Oracle... Please wait 😭
+        </p>
+
+
+        {% if result %}
+
+        <div class="result">
+
+            <h2>🤖 Object Therapy Session</h2>
+
+            <p style="white-space: pre-line;">
+                {{ result }}
+            </p>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+
+    <script>
+
+        function previewImage(event) {
+
+            const preview = document.getElementById("preview");
+
+            const file = event.target.files[0];
+
+            if (file) {
+
+                preview.src = URL.createObjectURL(file);
+
+                preview.style.display = "block";
+
+            }
+
+        }
+
+
+        function showLoading() {
+
+            document.getElementById("loading").style.display = "block";
+
+        }
+
+    </script>
 
 </body>
 
