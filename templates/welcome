@@ -51,9 +51,8 @@
 
     <div class="container">
 
-    <a href="/">← Back to Home</a>
+        <h1>🔮 Thing Therapist</h1>
 
-    <h1>🔮 Thing Therapist</h1>
         <p class="subtitle">
             Because apparently, even your household objects need life advice.
         </p>
