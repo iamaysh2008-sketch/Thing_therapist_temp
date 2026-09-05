@@ -1,14 +1,12 @@
 from flask import Flask, render_template, request
-from openai import OpenAI
+from openai import AuthenticationError, OpenAI
 import os
 import base64
 
 app = Flask(__name__)
 
-# OpenAI client
-# It automatically uses the OPENAI_API_KEY
-# from your PowerShell environment variable.
-client = OpenAI()
+def get_openai_client():
+    return OpenAI()
 
 # Upload folder
 UPLOAD_FOLDER = "uploads"
@@ -64,9 +62,9 @@ def analyser():
         try:
 
             # Ask the AI
-            response = client.responses.create(
+            response = get_openai_client().responses.create(
 
-                model="gpt-5.6-luna",
+                model="gpt-4o",
 
                 input=[
                     {
@@ -115,7 +113,7 @@ Keep the response short, funny and playful.
                                 "type": "input_image",
 
                                 "image_url":
-                                f"data:image/jpeg;base64,{encoded_image}"
+                                f"data:{image.mimetype or 'image/jpeg'};base64,{encoded_image}"
                             }
                         ]
                     }
@@ -127,11 +125,18 @@ Keep the response short, funny and playful.
 
         # Show a friendly error instead of
         # crashing the entire website
-        except Exception as error:
+        except AuthenticationError:
+
+            result = (
+                "🔑 The Object Oracle's API key is invalid or has been "
+                "revoked. Update OPENAI_API_KEY in Vercel, then redeploy."
+            )
+
+        except Exception:
 
             result = (
                 "🚨 The Object Oracle had a problem 😭\n\n"
-                + str(error)
+                "Please try again in a moment."
             )
 
 
