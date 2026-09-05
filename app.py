@@ -12,7 +12,10 @@ def get_openai_client():
             "OPENAI_API_KEY is not configured. Add it to the Vercel project "
             "environment variables and redeploy."
         )
-    return OpenAI(api_key=api_key)
+    return OpenAI(
+        api_key=api_key,
+        base_url="https://openrouter.ai/api/v1"
+    )
 
 # Upload folder
 UPLOAD_FOLDER = "uploads"
@@ -70,7 +73,7 @@ def analyser():
             # Ask the AI
             response = get_openai_client().responses.create(
 
-                model="gpt-4o-mini",
+                model="openai/gpt-4o:batch",
 
                 input=[
                     {
@@ -142,11 +145,11 @@ Keep the response short, funny and playful.
 
             result = f"⚙️ Configuration problem: {error}"
 
-        except Exception:
+        except Exception as error:
 
             result = (
                 "🚨 The Object Oracle had a problem 😭\n\n"
-                "Please try again in a moment."
+                f"Please try again in a moment. Error: {error}"
             )
 
 
