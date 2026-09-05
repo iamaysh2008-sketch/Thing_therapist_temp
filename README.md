@@ -2,7 +2,7 @@
 
 
 
-# THING THERAPIST 🎯
+# THING THERAPIST 🔮
 
 
 ## Basic Details
