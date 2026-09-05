@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Object Adviser 🔮</title>
 </head>
@@ -10,16 +11,18 @@
 
     <p>Because even objects need life advice.</p>
 
-    <h2>What object needs advice today?</h2>
+    <h2>Upload an object that needs advice 📸</h2>
 
-    <form method="POST">
+    <form method="POST" enctype="multipart/form-data">
 
-        <input 
-            type="text" 
-            name="object" 
-            placeholder="Example: Chair"
+        <input
+            type="file"
+            name="image"
+            accept="image/*"
             required
         >
+
+        <br><br>
 
         <button type="submit">
             Get Advice
@@ -27,13 +30,12 @@
 
     </form>
 
-    {% if advice %}
+    {% if result %}
 
-        <h2>💬 Advice for your object:</h2>
-
-        <p>{{ advice }}</p>
+        <h2>{{ result }}</h2>
 
     {% endif %}
 
 </body>
+
 </html>
