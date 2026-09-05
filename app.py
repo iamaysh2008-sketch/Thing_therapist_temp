@@ -13,13 +13,20 @@ app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 
+# -------------------------------
 # WELCOME PAGE
+# -------------------------------
+
 @app.route("/")
 def welcome():
+
     return render_template("welcome.html")
 
 
+# -------------------------------
 # OBJECT ANALYSER PAGE
+# -------------------------------
+
 @app.route("/analyser", methods=["GET", "POST"])
 def analyser():
 
@@ -38,11 +45,18 @@ def analyser():
 
             image.save(filepath)
 
+
+            # Convert image into a format
+            # that the AI can understand
+
             with open(filepath, "rb") as image_file:
 
                 encoded_image = base64.b64encode(
                     image_file.read()
                 ).decode("utf-8")
+
+
+            # Ask the AI
 
             response = client.responses.create(
 
@@ -58,20 +72,37 @@ def analyser():
                                 "type": "input_text",
 
                                 "text": """
-Look at this image and identify the main object.
+Look carefully at this image and identify
+the main object.
 
-Then give that object funny and completely unnecessary life advice.
+Pretend that this object is receiving
+completely unnecessary therapy.
 
-Treat the object as if it has feelings.
+Give it funny and useless life advice.
 
-Make the advice connected to what the object does.
+Treat the object as if it has feelings,
+emotions, and personal problems.
 
-Keep the answer short.
+The advice should relate to what the
+object actually does.
 
-Use this format:
+Also give the object a funny emotional
+status with a random percentage.
+
+Use EXACTLY this format:
+
+EMOTIONAL STATUS:
+(example: 87% Existential Crisis 😭)
 
 OBJECT:
+(example: Chair 🪑)
+
 ADVICE:
+(example: You have spent your entire life
+supporting everyone else. Maybe it is time
+to finally take a stand for yourself.)
+
+Keep everything short, funny, and playful.
 """
                             },
 
@@ -86,7 +117,9 @@ ADVICE:
                 ]
             )
 
+
             result = response.output_text
+
 
     return render_template(
         "index.html",
@@ -94,5 +127,10 @@ ADVICE:
     )
 
 
+# -------------------------------
+# RUN THE APP
+# -------------------------------
+
 if __name__ == "__main__":
+
     app.run(debug=True)
