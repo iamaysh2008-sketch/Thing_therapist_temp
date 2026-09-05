@@ -6,70 +6,302 @@
 
     <style>
 
+        * {
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            text-align: center;
             margin: 0;
             min-height: 100vh;
+
+            font-family: Arial, sans-serif;
+
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #f4f4f4;
+
+            overflow: hidden;
+
+            background: linear-gradient(
+                135deg,
+                #6ee7ff,
+                #a78bfa,
+                #f9a8d4,
+                #fde68a,
+                #86efac
+            );
+
+            background-size: 400% 400%;
+
+            animation: backgroundMove 12s ease infinite;
         }
+
+
+        /* Moving colourful background */
+
+        @keyframes backgroundMove {
+
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+
+        }
+
+
+        /* Main card */
 
         .container {
-            max-width: 600px;
+
+            width: 90%;
+            max-width: 650px;
+
             padding: 50px;
-            background: white;
-            border-radius: 25px;
+
+            text-align: center;
+
+            background: rgba(255, 255, 255, 0.85);
+
+            border-radius: 35px;
+
+            box-shadow:
+                0 20px 50px rgba(0,0,0,0.25);
+
+            animation: cardFloat 4s ease-in-out infinite;
+
         }
+
+
+        @keyframes cardFloat {
+
+            0%, 100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-12px);
+            }
+
+        }
+
 
         h1 {
-            font-size: 50px;
+
+            font-size: 52px;
+
+            margin: 10px;
+
+            animation: titleWiggle 3s infinite;
+
         }
+
+
+        @keyframes titleWiggle {
+
+            0%, 100% {
+                transform: rotate(0deg);
+            }
+
+            25% {
+                transform: rotate(-2deg);
+            }
+
+            75% {
+                transform: rotate(2deg);
+            }
+
+        }
+
 
         .subtitle {
-            font-size: 20px;
-            margin-bottom: 35px;
+
+            font-size: 19px;
+
+            line-height: 1.6;
+
         }
 
+
+        /* Button */
+
         .start-button {
+
             display: inline-block;
-            padding: 15px 30px;
-            background-color: black;
+
+            margin-top: 25px;
+
+            padding: 17px 35px;
+
+            background: #111827;
+
             color: white;
+
             text-decoration: none;
-            border-radius: 12px;
+
+            border-radius: 50px;
+
             font-size: 18px;
+
+            font-weight: bold;
+
+            transition: 0.3s;
+
+            animation: buttonBounce 2s infinite;
+
+        }
+
+
+        .start-button:hover {
+
+            transform: scale(1.1) rotate(2deg);
+
+        }
+
+
+        @keyframes buttonBounce {
+
+            0%, 100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-8px);
+            }
+
+        }
+
+
+        /* Floating objects */
+
+        .floating {
+
+            position: absolute;
+
+            font-size: 45px;
+
+            animation: floatAround 6s ease-in-out infinite;
+
+            pointer-events: none;
+
+        }
+
+
+        @keyframes floatAround {
+
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-30px) rotate(15deg);
+            }
+
+        }
+
+
+        .object1 {
+            top: 8%;
+            left: 8%;
+        }
+
+        .object2 {
+            top: 15%;
+            right: 10%;
+            animation-delay: 1s;
+        }
+
+        .object3 {
+            bottom: 10%;
+            left: 10%;
+            animation-delay: 2s;
+        }
+
+        .object4 {
+            bottom: 12%;
+            right: 8%;
+            animation-delay: 3s;
+        }
+
+        .object5 {
+            top: 45%;
+            left: 4%;
+            animation-delay: 1.5s;
+        }
+
+        .object6 {
+            top: 50%;
+            right: 5%;
+            animation-delay: 2.5s;
         }
 
     </style>
 
 </head>
 
+
 <body>
 
+
+    <!-- Floating objects 😂 -->
+
+    <div class="floating object1">🪑</div>
+
+    <div class="floating object2">🧦</div>
+
+    <div class="floating object3">🪥</div>
+
+    <div class="floating object4">🥄</div>
+
+    <div class="floating object5">🧸</div>
+
+    <div class="floating object6">💡</div>
+
+
+    <!-- Main card -->
+
     <div class="container">
-        
-        <h1>🔮 Thing Therapist</h1>
+
+        <h1>🔮 Object Adviser</h1>
 
         <p class="subtitle">
-            Because apparently, even your household objects need life advice.
+
+            Welcome to the only place where your household objects
+            receive life advice they absolutely did not ask for. 😂
+
         </p>
+
 
         <p>
-            Upload a picture of any object and let our completely
-            unqualified AI therapist give it unnecessary advice. 😭
+
+            Upload any object.
+
+            <br>
+
+            Our AI will analyse its emotional situation.
+
+            <br>
+
+            Yes, even your chair has problems. 🪑
+
         </p>
 
-        <br>
 
         <a href="/analyser" class="start-button">
-            Start Object Therapy →
+
+            START OBJECT THERAPY 🚀
+
         </a>
-        
+
 
     </div>
+
 
 </body>
 

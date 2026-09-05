@@ -6,49 +6,386 @@
 
     <style>
 
+        * {
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            text-align: center;
             margin: 0;
             min-height: 100vh;
-            padding: 40px;
-            background-color: #f4f4f4;
+            padding: 40px 20px;
+
+            font-family: Arial, sans-serif;
+
+            overflow-x: hidden;
+
+            background: linear-gradient(
+                135deg,
+                #00c6ff,
+                #7b2ff7,
+                #ff4e91,
+                #ffcc00,
+                #00e676
+            );
+
+            background-size: 400% 400%;
+
+            animation: backgroundMove 12s ease infinite;
         }
+
+        @keyframes backgroundMove {
+
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+
+        /* FLOATING OBJECTS */
+
+        .floating {
+
+            position: fixed;
+
+            font-size: 45px;
+
+            z-index: 1;
+
+            pointer-events: none;
+
+            animation: floatAround 6s ease-in-out infinite;
+        }
+
+        @keyframes floatAround {
+
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-35px) rotate(20deg);
+            }
+        }
+
+        .object1 {
+            top: 8%;
+            left: 5%;
+        }
+
+        .object2 {
+            top: 12%;
+            right: 6%;
+            animation-delay: 1s;
+        }
+
+        .object3 {
+            bottom: 10%;
+            left: 6%;
+            animation-delay: 2s;
+        }
+
+        .object4 {
+            bottom: 8%;
+            right: 7%;
+            animation-delay: 3s;
+        }
+
+        .object5 {
+            top: 50%;
+            left: 3%;
+            animation-delay: 1.5s;
+        }
+
+        .object6 {
+            top: 55%;
+            right: 3%;
+            animation-delay: 2.5s;
+        }
+
+
+        /* MAIN CARD */
 
         .container {
-            max-width: 600px;
+
+            position: relative;
+
+            z-index: 2;
+
+            max-width: 650px;
+
             margin: auto;
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
+
+            padding: 45px;
+
+            text-align: center;
+
+            background: rgba(255, 255, 255, 0.9);
+
+            border-radius: 35px;
+
+            box-shadow:
+                0 20px 50px rgba(0, 0, 0, 0.3);
+
+            animation: cardFloat 4s ease-in-out infinite;
         }
 
-        #preview {
-            display: none;
-            max-width: 300px;
-            max-height: 300px;
-            margin: 20px auto;
+        @keyframes cardFloat {
+
+            0%, 100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+
+
+        /* BACK BUTTON */
+
+        .back-button {
+
+            display: inline-block;
+
+            margin-bottom: 20px;
+
+            color: #333;
+
+            text-decoration: none;
+
+            font-weight: bold;
+
+            transition: 0.3s;
+        }
+
+        .back-button:hover {
+
+            transform: translateX(-5px);
+
+        }
+
+
+        /* TITLE */
+
+        h1 {
+
+            font-size: 45px;
+
+            margin: 10px 0;
+
+            animation: wiggle 3s infinite;
+        }
+
+        @keyframes wiggle {
+
+            0%, 100% {
+                transform: rotate(0deg);
+            }
+
+            25% {
+                transform: rotate(-2deg);
+            }
+
+            75% {
+                transform: rotate(2deg);
+            }
+        }
+
+
+        .subtitle {
+
+            font-size: 18px;
+
+            line-height: 1.6;
+
+            margin-bottom: 30px;
+        }
+
+
+        /* FILE UPLOAD */
+
+        input[type="file"] {
+
+            max-width: 100%;
+
+            padding: 12px;
+
+            background: #f3f4f6;
+
             border-radius: 15px;
-        }
 
-        button {
-            padding: 15px 25px;
-            font-size: 16px;
-            border: none;
-            border-radius: 10px;
             cursor: pointer;
         }
 
-        .result {
-            margin-top: 30px;
-            padding: 20px;
-            background-color: #eeeeee;
-            border-radius: 15px;
+
+        /* IMAGE PREVIEW */
+
+        #preview {
+
+            display: none;
+
+            max-width: 100%;
+
+            max-height: 300px;
+
+            margin: 25px auto;
+
+            border-radius: 20px;
+
+            box-shadow:
+                0 10px 25px rgba(0, 0, 0, 0.2);
+
+            animation: previewPop 0.5s ease;
         }
 
-        #loading {
-            display: none;
+        @keyframes previewPop {
+
+            from {
+                transform: scale(0.7) rotate(-3deg);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+
+        /* BUTTON */
+
+        button {
+
             margin-top: 20px;
+
+            padding: 18px 30px;
+
+            border: none;
+
+            border-radius: 50px;
+
+            background: #111827;
+
+            color: white;
+
+            font-size: 17px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            animation: buttonBounce 2s infinite;
+
+            transition: 0.3s;
+        }
+
+        button:hover {
+
+            transform: scale(1.08) rotate(2deg);
+
+        }
+
+        @keyframes buttonBounce {
+
+            0%, 100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-6px);
+            }
+        }
+
+
+        /* LOADING MESSAGE */
+
+        #loading {
+
+            display: none;
+
+            margin-top: 25px;
+
+            font-size: 18px;
+
+            font-weight: bold;
+
+            animation: loadingWiggle 1s infinite;
+        }
+
+        @keyframes loadingWiggle {
+
+            0%, 100% {
+                transform: rotate(0deg);
+            }
+
+            50% {
+                transform: rotate(2deg);
+            }
+        }
+
+
+        /* RESULT CARD */
+
+        .result {
+
+            margin-top: 35px;
+
+            padding: 30px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #fff3b0,
+                    #ffd6e7,
+                    #d8b4fe
+                );
+
+            border-radius: 25px;
+
+            border: 3px dashed #333;
+
+            box-shadow:
+                5px 5px 0px rgba(0, 0, 0, 0.2);
+
+            animation: resultAppear 0.7s ease;
+        }
+
+        @keyframes resultAppear {
+
+            from {
+
+                transform:
+                    scale(0.7)
+                    rotate(-4deg);
+
+                opacity: 0;
+            }
+
+            to {
+
+                transform:
+                    scale(1)
+                    rotate(0deg);
+
+                opacity: 1;
+            }
+        }
+
+        .result p {
+
+            font-size: 17px;
+
+            line-height: 1.7;
+
+            white-space: pre-line;
         }
 
     </style>
@@ -58,15 +395,39 @@
 
 <body>
 
+
+    <!-- FLOATING OBJECTS -->
+
+    <div class="floating object1">🪑</div>
+
+    <div class="floating object2">🧦</div>
+
+    <div class="floating object3">🧸</div>
+
+    <div class="floating object4">💡</div>
+
+    <div class="floating object5">🥄</div>
+
+    <div class="floating object6">🪥</div>
+
+
+    <!-- MAIN CONTENT -->
+
     <div class="container">
 
-        <a href="/">← Back to Home</a>
+        <a href="/" class="back-button">
+            ← Escape Object Therapy
+        </a>
 
-        <h1>🔮 Object Adviser</h1>
 
-        <p>
-            Upload an object and give it the emotional support
-            it definitely did not ask for. 😭
+        <h1>🔮 Object Analyser</h1>
+
+
+        <p class="subtitle">
+
+            Upload an object and let our AI investigate
+            its completely unnecessary emotional problems. 😂
+
         </p>
 
 
@@ -76,7 +437,8 @@
             onsubmit="showLoading()"
         >
 
-            <h2>Choose your object 📸</h2>
+            <h2>📸 Choose an object</h2>
+
 
             <input
                 type="file"
@@ -86,33 +448,44 @@
                 onchange="previewImage(event)"
             >
 
-            <br>
 
             <img id="preview">
 
+
             <br>
 
+
             <button type="submit">
-                🔮 Give My Object Advice
+
+                🔮 ANALYSE MY OBJECT!
+
             </button>
 
         </form>
 
 
-        <p id="loading">
-            🔮 Consulting the Object Oracle... Please wait 😭
-        </p>
+        <!-- LOADING -->
 
+        <div id="loading">
+
+            🔮 Consulting the Object Oracle...
+
+            <br>
+
+            Your object is currently discussing its feelings. 😭
+
+        </div>
+
+
+        <!-- AI RESULT -->
 
         {% if result %}
 
         <div class="result">
 
-            <h2>🤖 Object Therapy Session</h2>
+            <h2>🤖 OBJECT THERAPY SESSION</h2>
 
-            <p style="white-space: pre-line;">
-                {{ result }}
-            </p>
+            <p>{{ result }}</p>
 
         </div>
 
@@ -121,19 +494,26 @@
     </div>
 
 
+    <!-- JAVASCRIPT -->
+
     <script>
 
         function previewImage(event) {
 
-            const preview = document.getElementById("preview");
+            const preview =
+                document.getElementById("preview");
 
-            const file = event.target.files[0];
+            const file =
+                event.target.files[0];
+
 
             if (file) {
 
-                preview.src = URL.createObjectURL(file);
+                preview.src =
+                    URL.createObjectURL(file);
 
-                preview.style.display = "block";
+                preview.style.display =
+                    "block";
 
             }
 
@@ -142,11 +522,14 @@
 
         function showLoading() {
 
-            document.getElementById("loading").style.display = "block";
+            document.getElementById(
+                "loading"
+            ).style.display = "block";
 
         }
 
     </script>
+
 
 </body>
 
