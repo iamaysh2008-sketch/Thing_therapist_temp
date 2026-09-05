@@ -39,10 +39,23 @@ For Hardware:
 ### Implementation
 For Software:
 # Installation
-[commands]
+```bash
+pip install -r requirements.txt
+```
 
 # Run
-[commands]
+```bash
+flask --app app run
+```
+
+## Deploy to Vercel
+
+1. Push this repository to GitHub.
+2. In [Vercel](https://vercel.com), select **Add New Project**, import this GitHub repository, and keep the project root as the repository root.
+3. Add an environment variable named `OPENAI_API_KEY` in the Vercel project settings. Use the same key locally in a `.env` file if needed; never commit the key.
+4. Deploy. Vercel uses `vercel.json` and `requirements.txt` to run the Flask app.
+
+The upload is processed in memory because Vercel function storage is temporary. The OpenAI API key is required for image analysis.
 
 ### Project Documentation
 For Software:

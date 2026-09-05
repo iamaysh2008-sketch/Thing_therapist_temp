@@ -5,12 +5,9 @@ import base64
 
 app = Flask(__name__)
 
-client = OpenAI()
 
-UPLOAD_FOLDER = "uploads"
-app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
-
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+def get_openai_client():
+    return OpenAI()
 
 
 # -------------------------------
@@ -34,33 +31,22 @@ def analyser():
 
     if request.method == "POST":
 
-        image = request.files["image"]
+        image = request.files.get("image")
 
-        if image:
-
-            filepath = os.path.join(
-                app.config["UPLOAD_FOLDER"],
-                image.filename
-            )
-
-            image.save(filepath)
-
+        if image and image.filename:
 
             # Convert image into a format
             # that the AI can understand
-
-            with open(filepath, "rb") as image_file:
-
-                encoded_image = base64.b64encode(
-                    image_file.read()
-                ).decode("utf-8")
+            encoded_image = base64.b64encode(
+                image.read()
+            ).decode("utf-8")
 
 
             # Ask the AI
 
-            response = client.responses.create(
+            response = get_openai_client().responses.create(
 
-                model="gpt-5.6-luna",
+                model="gpt-4o",
 
                 input=[
                     {
@@ -110,7 +96,7 @@ Keep everything short, funny, and playful.
                                 "type": "input_image",
 
                                 "image_url":
-                                f"data:image/jpeg;base64,{encoded_image}"
+                                f"data:{image.mimetype or 'image/jpeg'};base64,{encoded_image}"
                             }
                         ]
                     }
