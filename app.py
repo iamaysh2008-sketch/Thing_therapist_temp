@@ -5,24 +5,30 @@ import base64
 
 app = Flask(__name__)
 
+# OpenAI client
+# It automatically uses the OPENAI_API_KEY
+# from your PowerShell environment variable.
+client = OpenAI()
 
-def get_openai_client():
-    return OpenAI()
+# Upload folder
+UPLOAD_FOLDER = "uploads"
+app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
+
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 
-# -------------------------------
+# -----------------------------
 # WELCOME PAGE
-# -------------------------------
+# -----------------------------
 
 @app.route("/")
 def welcome():
-
     return render_template("welcome.html")
 
 
-# -------------------------------
+# -----------------------------
 # OBJECT ANALYSER PAGE
-# -------------------------------
+# -----------------------------
 
 @app.route("/analyser", methods=["GET", "POST"])
 def analyser():
@@ -31,22 +37,36 @@ def analyser():
 
     if request.method == "POST":
 
-        image = request.files.get("image")
+        # Check if an image was uploaded
+        if "image" not in request.files:
+            return render_template(
+                "index.html",
+                result="No image was uploaded 😭"
+            )
 
-        if image and image.filename:
+        image = request.files["image"]
 
-            # Convert image into a format
-            # that the AI can understand
-            encoded_image = base64.b64encode(
-                image.read()
-            ).decode("utf-8")
+        # Check if the user selected a file
+        if image.filename == "":
+            return render_template(
+                "index.html",
+                result="Please choose an object first! 🧐"
+            )
 
+        # Read the image directly
+        image_data = image.read()
+
+        # Convert image to Base64
+        encoded_image = base64.b64encode(
+            image_data
+        ).decode("utf-8")
+
+        try:
 
             # Ask the AI
+            response = client.responses.create(
 
-            response = get_openai_client().responses.create(
-
-                model="gpt-4o",
+                model="gpt-5.6-luna",
 
                 input=[
                     {
@@ -58,37 +78,36 @@ def analyser():
                                 "type": "input_text",
 
                                 "text": """
-Look carefully at this image and identify
+You are the world's most unnecessary
+therapist for everyday objects.
+
+Look carefully at the image and identify
 the main object.
 
-Pretend that this object is receiving
-completely unnecessary therapy.
+Pretend the object has feelings and
+personal problems.
 
-Give it funny and useless life advice.
-
-Treat the object as if it has feelings,
-emotions, and personal problems.
-
-The advice should relate to what the
-object actually does.
+Give it funny, ridiculous and completely
+unnecessary life advice related to what
+the object actually does.
 
 Also give the object a funny emotional
-status with a random percentage.
+status with a percentage.
 
 Use EXACTLY this format:
 
 EMOTIONAL STATUS:
-(example: 87% Existential Crisis 😭)
+87% Existential Crisis 😭
 
 OBJECT:
-(example: Chair 🪑)
+Chair 🪑
 
 ADVICE:
-(example: You have spent your entire life
-supporting everyone else. Maybe it is time
-to finally take a stand for yourself.)
+You have spent your entire life supporting
+everyone else. Maybe it is finally time to
+take a stand for yourself.
 
-Keep everything short, funny, and playful.
+Keep the response short, funny and playful.
 """
                             },
 
@@ -96,15 +115,24 @@ Keep everything short, funny, and playful.
                                 "type": "input_image",
 
                                 "image_url":
-                                f"data:{image.mimetype or 'image/jpeg'};base64,{encoded_image}"
+                                f"data:image/jpeg;base64,{encoded_image}"
                             }
                         ]
                     }
                 ]
             )
 
-
             result = response.output_text
+
+
+        # Show a friendly error instead of
+        # crashing the entire website
+        except Exception as error:
+
+            result = (
+                "🚨 The Object Oracle had a problem 😭\n\n"
+                + str(error)
+            )
 
 
     return render_template(
@@ -113,10 +141,9 @@ Keep everything short, funny, and playful.
     )
 
 
-# -------------------------------
+# -----------------------------
 # RUN THE APP
-# -------------------------------
+# -----------------------------
 
 if __name__ == "__main__":
-
     app.run(debug=True)
